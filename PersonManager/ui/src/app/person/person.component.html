@@ -1,0 +1,60 @@
+<!-- Form to view and edit person details -->
+<div class="container">
+  <form (ngSubmit)="savePerson()">
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input
+        [(ngModel)]="person.name"
+        name="name"
+        class="form-control"
+        id="name"
+        required
+      />
+    </div>
+    <div class="form-group">
+      <label for="age">Age</label>
+      <input
+        [(ngModel)]="person.age"
+        name="age"
+        type="number"
+        class="form-control"
+        id="age"
+        required
+      />
+    </div>
+    <div class="form-group">
+      <label for="gender">Gender</label>
+      <select class="form-control" id="gender" [(ngModel)]="person.genderTypeId"  name="gender" required>
+        <option *ngFor="let genderType of genderTypes" [value]="genderType.genderTypeId">{{ genderType.name }}</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input
+        [(ngModel)]="person.email"
+        name="email"
+        type="email"
+        class="form-control"
+        id="email"
+        required
+      />
+    </div>
+    <div class="form-group">
+      <label for="phone">Phone</label>
+      <input
+        [(ngModel)]="person.phone"
+        name="phone"
+        class="form-control"
+        id="phone"
+        required
+      />
+    </div>
+    <button type="submit" class="btn btn-success">Save</button>
+    <button type="button" (click)="deletePerson()" class="btn btn-danger">
+      Delete
+    </button>
+    <button type="button" (click)="goBack()" class="btn btn-secondary">
+      Back
+    </button>
+  </form>
+</div>

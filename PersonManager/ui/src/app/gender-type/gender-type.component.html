@@ -1,0 +1,11 @@
+<div class="container">
+    <form (ngSubmit)="saveGenderType()">
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input [(ngModel)]="genderType.name" name="name" class="form-control" id="name" required>
+      </div>
+      <button type="submit" class="btn btn-success">Save</button>
+      <button type="button" (click)="deleteGenderType()" class="btn btn-danger">Delete</button>
+      <button type="button" (click)="goBack()" class="btn btn-secondary">Back</button>
+    </form>
+  </div>

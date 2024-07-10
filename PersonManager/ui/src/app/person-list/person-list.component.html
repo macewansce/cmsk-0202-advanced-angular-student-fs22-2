@@ -1,0 +1,31 @@
+<!-- Table to display list of persons -->
+<div class="container">
+  <button (click)="addPerson()" class="btn btn-success mb-3">New Person</button>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Age</th>
+        <th>Gender</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let person of persons" >
+        <td >{{ person.name }}</td>
+        <td >{{ person.age }}</td>
+        <td >{{ getGenderTypeName(person.genderTypeId) }}</td>
+        <td >{{ person.email }}</td>
+        <td >{{ person.phone }}</td>
+        <td appHighlight="yellow">
+          <!-- Button to view person details -->
+          <button (click)="viewPerson(person.id)" class="btn btn-primary" >
+            View
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
