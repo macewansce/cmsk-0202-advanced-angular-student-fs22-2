@@ -11,7 +11,7 @@ import { GenderType } from "../models/gender-type.model";
   providedIn: "root",
 })
 export class GenderTypeService {
-  private url = "https://localhost:7247/genderTypes"; // URL to the JSON server
+  private url = "https://localhost:7007/api/GenderTypes"; // URL to the JSON server
 
   constructor(private http: HttpClient) {}
 
