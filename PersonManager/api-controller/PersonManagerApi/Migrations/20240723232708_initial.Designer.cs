@@ -12,7 +12,7 @@ using PersonManagerApi.Data;
 namespace PersonManagerApi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240711235736_initial")]
+    [Migration("20240723232708_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -76,8 +76,8 @@ namespace PersonManagerApi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Phone")
-                        .HasColumnType("int");
+                    b.Property<long?>("Phone")
+                        .HasColumnType("bigint");
 
                     b.HasKey("PersonId");
 

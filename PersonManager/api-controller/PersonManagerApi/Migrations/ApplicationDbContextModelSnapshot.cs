@@ -73,8 +73,8 @@ namespace PersonManagerApi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Phone")
-                        .HasColumnType("int");
+                    b.Property<long?>("Phone")
+                        .HasColumnType("bigint");
 
                     b.HasKey("PersonId");
 

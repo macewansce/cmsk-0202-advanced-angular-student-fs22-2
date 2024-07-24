@@ -2,7 +2,7 @@
     <form (ngSubmit)="saveGenderType()">
       <div class="form-group">
         <label for="name">Name</label>
-        <input [(ngModel)]="genderType.name" name="name" class="form-control" id="name" required>
+        <input [(ngModel)]="genderType.name" name="name" class="form-control" id="name" required pattern="">
       </div>
       <button type="submit" class="btn btn-success">Save</button>
       <button type="button" (click)="deleteGenderType()" class="btn btn-danger">Delete</button>

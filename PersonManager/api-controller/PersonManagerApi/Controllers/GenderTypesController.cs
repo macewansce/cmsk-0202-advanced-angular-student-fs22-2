@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PersonManagerApi.Data;
+using PersonManagerApi.Dtos;
 using PersonManagerApi.Models;
+using PersonManagerApi.Services;
 
 namespace PersonManagerApi.Controllers
 {
@@ -15,21 +17,26 @@ namespace PersonManagerApi.Controllers
     public class GenderTypesController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly IGenderTypesService _serivce;
 
-        public GenderTypesController(ApplicationDbContext context)
+        public GenderTypesController(ApplicationDbContext context, IGenderTypesService serivce)
         {
             _context = context;
+            _serivce = serivce;
         }
 
         // GET: api/GenderTypes
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<GenderType>>> GetGenderTypes()
+        public async Task<ActionResult<IEnumerable<GenderTypeDto>>> GetGenderTypes()
         {
           if (_context.GenderTypes == null)
           {
               return NotFound();
           }
-            return await _context.GenderTypes.ToListAsync();
+
+         var genderTypes = await _serivce.GetGenderTypes();
+
+          return GenderTypeMapper.ToDtos(genderTypes);
         }
 
         // GET: api/GenderTypes/5
