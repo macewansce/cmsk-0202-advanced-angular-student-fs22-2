@@ -1,4 +1,4 @@
-﻿using PersonManagerApi.Models;
+﻿using PersonManagerApi.Models.Entities;
 
 namespace PersonManagerApi.Data
 {

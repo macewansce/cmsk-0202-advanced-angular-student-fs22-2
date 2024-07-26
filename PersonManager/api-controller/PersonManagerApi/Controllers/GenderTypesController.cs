@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PersonManagerApi.Data;
-using PersonManagerApi.Dtos;
-using PersonManagerApi.Models;
+using PersonManagerApi.Models.Dtos;
+using PersonManagerApi.Models.Mappers;
 using PersonManagerApi.Services;
 
 namespace PersonManagerApi.Controllers
@@ -17,12 +12,12 @@ namespace PersonManagerApi.Controllers
     public class GenderTypesController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        private readonly IGenderTypesService _serivce;
+        private readonly IGenderTypesService _service;
 
-        public GenderTypesController(ApplicationDbContext context, IGenderTypesService serivce)
+        public GenderTypesController(ApplicationDbContext context, IGenderTypesService service)
         {
             _context = context;
-            _serivce = serivce;
+            _service = service;
         }
 
         // GET: api/GenderTypes
@@ -34,57 +29,40 @@ namespace PersonManagerApi.Controllers
               return NotFound();
           }
 
-         var genderTypes = await _serivce.GetGenderTypes();
+         var genderTypes = await _service.GetAll();
 
           return GenderTypeMapper.ToDtos(genderTypes);
         }
 
         // GET: api/GenderTypes/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<GenderType>> GetGenderType(int id)
+        public async Task<ActionResult<GenderTypeDto>> GetGenderType(int id)
         {
-          if (_context.GenderTypes == null)
-          {
-              return NotFound();
-          }
-            var genderType = await _context.GenderTypes.FindAsync(id);
+            var genderType = await _service.GetOne(id);
 
             if (genderType == null)
             {
                 return NotFound();
             }
 
-            return genderType;
+            return GenderTypeMapper.ToDto(genderType);
         }
 
         // PUT: api/GenderTypes/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutGenderType(int id, GenderType genderType)
+        public async Task<IActionResult> PutGenderType(int id, GenderTypeDto genderType)
         {
             if (id != genderType.GenderTypeId)
             {
                 return BadRequest();
             }
 
-            var genderTypeToBeUpdated = await _context.GenderTypes.FindAsync(id);
+            var genderTypeToBeUpdated = await _service.Update(GenderTypeMapper.ToEntity(genderType));
 
             if (genderTypeToBeUpdated == null)
             {
                 return NotFound();
-            }
-
-            genderTypeToBeUpdated.Name = genderType.Name;
-
-            _context.Entry(genderTypeToBeUpdated).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                throw;
             }
 
             return NoContent();
@@ -93,54 +71,29 @@ namespace PersonManagerApi.Controllers
         // POST: api/GenderTypes
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<GenderType>> PostGenderType(GenderType genderType)
+        public async Task<ActionResult<GenderTypeDto>> PostGenderType(GenderTypeDto genderType)
         {
-          if (_context.GenderTypes == null)
-          {
-              return Problem("Entity set 'ApplicationDbContext.GenderTypes'  is null.");
-          }
+            var genderTypeToAdd = GenderTypeMapper.ToEntity(genderType);
 
-            genderType.DateCreated = DateTime.Now;
-            genderType.IsDeleted = false;
+            var addedGenderType = await _service.Add(genderTypeToAdd);
 
-            _context.GenderTypes.Add(genderType);
-            await _context.SaveChangesAsync();
+            var addedGenderTypeDto = GenderTypeMapper.ToDto(addedGenderType);
 
-            return CreatedAtAction("GetGenderType", new { id = genderType.GenderTypeId }, genderType);
+            return CreatedAtAction("GetGenderType", new { id = addedGenderType.GenderTypeId }, addedGenderTypeDto);
         }
 
         // DELETE: api/GenderTypes/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteGenderType(int id)
         {
-            var genderType = await _context.GenderTypes.FindAsync(id);
+            var genderTypeToBeDelete = await _service.Delete(id);
 
-            if (genderType == null)
+            if (genderTypeToBeDelete == null)
             {
                 return NotFound();
-
-            }
-            
-            genderType.IsDeleted = true;
-
-            _context.Entry(genderType).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-               
-                    throw;
             }
 
             return NoContent();
-        }
-
-        private bool GenderTypeExists(int id)
-        {
-            return (_context.GenderTypes?.Any(e => e.GenderTypeId == id)).GetValueOrDefault();
         }
     }
 }

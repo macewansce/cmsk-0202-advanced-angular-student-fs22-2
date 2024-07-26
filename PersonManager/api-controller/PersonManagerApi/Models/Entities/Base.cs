@@ -1,6 +1,4 @@
-﻿
-
-namespace PersonManagerApi.Models
+﻿namespace PersonManagerApi.Models.Entities
 {
     public class Base
     {

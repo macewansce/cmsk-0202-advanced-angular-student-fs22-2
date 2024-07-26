@@ -1,15 +1,15 @@
-﻿using System.Text.Json.Serialization;
-using PersonManagerApi.Dtos;
+﻿using PersonManagerApi.Models.Dtos;
+using PersonManagerApi.Models.Entities;
 
-namespace PersonManagerApi.Models
+namespace PersonManagerApi.Models.Mappers
 {
     public class GenderTypeMapper
     {
-        public static GenderTypeDto? ToDto(GenderType genderType)
+        public static GenderTypeDto ToDto(GenderType genderType)
         {
             if (genderType == null)
             {
-                return null;
+                throw new ArgumentNullException(nameof(genderType));
             }
 
             var dto = new GenderTypeDto
@@ -17,6 +17,8 @@ namespace PersonManagerApi.Models
                 GenderTypeId = genderType.GenderTypeId,
                 Name = genderType.Name,
                 IsDeleted = genderType.IsDeleted,
+                DateCreated = genderType.DateCreated,
+
             };
 
             return dto;
@@ -36,6 +38,25 @@ namespace PersonManagerApi.Models
             }
 
             return genderTypeDtos;
+        }
+
+        public static GenderType ToEntity(GenderTypeDto genderType)
+        {
+            if (genderType == null)
+            {
+                throw new ArgumentNullException(nameof(genderType));
+            }
+
+            var entity = new GenderType
+            {
+                GenderTypeId = genderType.GenderTypeId,
+                Name = genderType.Name,
+                IsDeleted = genderType.IsDeleted,
+                DateCreated = genderType.DateCreated,
+
+            };
+
+            return entity;
         }
 
 

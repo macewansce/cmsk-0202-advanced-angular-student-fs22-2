@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PersonManagerApi.Data;
-using PersonManagerApi.Models;
+using PersonManagerApi.Models.Entities;
 
 namespace PersonManagerApi.Controllers
 {

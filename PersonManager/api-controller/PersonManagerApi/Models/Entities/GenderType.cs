@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace PersonManagerApi.Models
+namespace PersonManagerApi.Models.Entities
 {
     public class GenderType : Base
     {
