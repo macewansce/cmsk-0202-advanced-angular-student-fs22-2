@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PersonManagerApi.Data;
-using PersonManagerApi.Models.Entities;
+using PersonManagerApi.Models.Dtos;
+using PersonManagerApi.Models.Mappers;
+using PersonManagerApi.Services;
 
 namespace PersonManagerApi.Controllers
 {
@@ -10,69 +12,57 @@ namespace PersonManagerApi.Controllers
     public class PersonsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly IPersonsService _service;
 
-        public PersonsController(ApplicationDbContext context)
+        public PersonsController(ApplicationDbContext context, IPersonsService service)
         {
             _context = context;
+            _service = service;
         }
 
         // GET: api/Persons
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Person>>> GetPersons()
+        public async Task<ActionResult<IEnumerable<PersonDto>>> GetPersons()
         {
+            if (_context.Persons == null)
+            {
+                return NotFound();
+            }
 
-            return await _context.Persons.ToListAsync();
+            var persons = await _service.GetAll();
+
+            return PersonMapper.ToDtos(persons);
         }
 
         // GET: api/Persons/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Person>> GetPerson(string id)
+        public async Task<ActionResult<PersonDto>> GetPerson(string id)
         {
-            var person = await _context.Persons.FindAsync(id);
+            var person = await _service.GetOne(id);
 
             if (person == null)
             {
                 return NotFound();
             }
 
-            return person;
+            return PersonMapper.ToDto(person);
         }
 
         // PUT: api/Persons/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPerson(string id, Person person)
+        public async Task<IActionResult> PutPerson(string id, PersonDto person)
         {
             if (id != person.PersonId)
             {
                 return BadRequest();
             }
 
-            var personToBeUpdated = await _context.Persons.FindAsync(id);
+            var personToBeUpdated = await _service.Update(PersonMapper.ToEntity(person));
 
             if (personToBeUpdated == null)
             {
                 return NotFound();
-            }
-
-            personToBeUpdated.FirstName = person.FirstName;
-            personToBeUpdated.LastName = person.LastName;
-            personToBeUpdated.DateOfBirth = person.DateOfBirth;
-            personToBeUpdated.Email = person.Email;
-            personToBeUpdated.Phone = person.Phone;
-            personToBeUpdated.GenderTypeId = person.GenderTypeId;
-
-    
-
-        _context.Entry(personToBeUpdated).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                throw;
             }
 
             return NoContent();
@@ -81,55 +71,29 @@ namespace PersonManagerApi.Controllers
         // POST: api/Persons
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Person>> PostPerson(Person person)
+        public async Task<ActionResult<PersonDto>> PostPerson(PersonDto person)
         {
-          if (_context.Persons == null)
-          {
-              return Problem("Entity set 'ApplicationDbContext.Persons'  is null.");
-          }
+            var personToAdd = PersonMapper.ToEntity(person);
 
-            person.PersonId = Guid.NewGuid().ToString();
-            person.DateCreated = DateTime.Now;
-            person.IsDeleted = false;
+            var addedPerson = await _service.Add(personToAdd);
 
-            _context.Persons.Add(person);
-            await _context.SaveChangesAsync();
+            var addedPersonDto = PersonMapper.ToDto(addedPerson);
 
-            return CreatedAtAction("GetPerson", new { id = person.PersonId }, person);
+            return CreatedAtAction("GetPerson", new { id = addedPerson.PersonId }, addedPersonDto);
         }
 
         // DELETE: api/Persons/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePerson(string id)
         {
-            var person = await _context.Persons.FindAsync(id);
+            var personToBeDelete = await _service.Delete(id);
 
-            if (person == null)
+            if (personToBeDelete == null)
             {
                 return NotFound();
-
-            }
-            
-            person.IsDeleted = true;
-
-            _context.Entry(person).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-               
-                    throw;
             }
 
             return NoContent();
-        }
-
-        private bool PersonExists(string id)
-        {
-            return (_context.Persons?.Any(e => e.PersonId == id)).GetValueOrDefault();
         }
     }
 }

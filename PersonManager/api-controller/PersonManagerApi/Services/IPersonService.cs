@@ -1,13 +1,13 @@
-﻿//using PersonManagerApi.Models.Entities;
+﻿using PersonManagerApi.Models.Entities;
 
-//namespace PersonManagerApi.Services
-//{
-//    public interface IGenderTypesService
-//    {
-//        Task<List<GenderType>> GetAll();
-//        Task<GenderType?> GetOne(int id);
-//        Task<GenderType> Add(GenderType genderType);
-//        Task<GenderType?> Update(GenderType genderType);
-//        Task<GenderType?> Delete(int id);
-//    }
-//}
+namespace PersonManagerApi.Services
+{
+    public interface IPersonsService
+    {
+        Task<List<Person>> GetAll();
+        Task<Person?> GetOne(string id);
+        Task<Person> Add(Person person);
+        Task<Person?> Update(Person person);
+        Task<Person?> Delete(string id);
+    }
+}

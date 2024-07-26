@@ -11,6 +11,7 @@ import { FormsModule } from '@angular/forms';
 import { GenderTypeListComponent } from './gender-type-list/gender-type-list.component';
 import { GenderTypeComponent } from './gender-type/gender-type.component';
 import { HighlightDirective } from './directives/highlight.directive';
+import { PhonePipe } from './pipes/phone.pipe';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { HighlightDirective } from './directives/highlight.directive';
     PersonComponent,
     GenderTypeListComponent,
     GenderTypeComponent,
-    HighlightDirective
+    HighlightDirective,
+    PhonePipe
   ],
   imports: [
     BrowserModule,

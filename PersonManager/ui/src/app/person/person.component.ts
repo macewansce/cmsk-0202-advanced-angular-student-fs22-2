@@ -12,12 +12,12 @@ import { GenderType } from '../models/gender-type.model';
 })
 export class PersonComponent implements OnInit {
   person: Person = {
-    id: '',
-    name: '',
-    age: 0,
-    email: '',
-    phone: '',
+    personId: '',
+    firstName: '',
+    lastName: '',
     dateOfBirth: new Date(),
+    email: '',
+    phone: 0,
     genderTypeId: 0,
     dateCreated: new Date(),
     isDeleted: false,
@@ -33,7 +33,7 @@ export class PersonComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    const id = this.route.snapshot.paramMap?.get('id'); // Get person id from route
+    const id = this.route.snapshot.paramMap?.get('personId');
     if (id) {
       // Fetch person details if id exists
       this.personService.getPerson(id).subscribe((data) => {
@@ -49,7 +49,7 @@ export class PersonComponent implements OnInit {
 
   // Save person details
   savePerson() {
-    if (this.person.id) {
+    if (this.person.personId) {
       this.personService
         .updatePerson(this.person)
         .subscribe(() => this.goBack());
@@ -60,9 +60,9 @@ export class PersonComponent implements OnInit {
 
   // Delete person
   deletePerson() {
-    if (this.person.id) {
+    if (this.person.personId) {
       this.personService
-        .deletePerson(this.person.id)
+        .deletePerson(this.person.personId)
         .subscribe(() => this.goBack());
     }
   }

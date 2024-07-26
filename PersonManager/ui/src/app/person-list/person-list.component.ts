@@ -33,8 +33,8 @@ export class PersonListComponent implements OnInit {
   }
 
   // Navigate to person details component
-  viewPerson(id: string) {
-    this.router.navigate(['/person', id]);
+  viewPerson(personId: string) {
+    this.router.navigate(['/person', personId]);
   }
 
   // Navigate to new person form

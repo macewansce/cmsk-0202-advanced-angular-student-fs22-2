@@ -1,66 +1,72 @@
-﻿//using Microsoft.EntityFrameworkCore;
-//using PersonManagerApi.Data;
-//using PersonManagerApi.Models.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using PersonManagerApi.Data;
+using PersonManagerApi.Models.Entities;
 
-//namespace PersonManagerApi.Services
-//{
-//    public class GenderTypesService : IGenderTypesService
-//    {
-//        private readonly ApplicationDbContext _context;
+namespace PersonManagerApi.Services
+{
+    public class PersonsService : IPersonsService
+    {
+        private readonly ApplicationDbContext _context;
 
-//        public GenderTypesService(ApplicationDbContext context) {
-//            _context = context;
-//        }
+        public PersonsService(ApplicationDbContext context) {
+            _context = context;
+        }
 
-//        public async Task<List<GenderType>> GetAll()
-//        {
-//            var genderType = await _context.GenderTypes.ToListAsync();
-//            return genderType;
-//        }
+        public async Task<List<Person>> GetAll()
+        {
+            var person = await _context.Persons.ToListAsync();
+            return person;
+        }
 
-//        public async Task<GenderType?> GetOne(int id)
-//        {
-//            var genderType = await _context.GenderTypes.FindAsync(id);
+        public async Task<Person?> GetOne(string id)
+        {
+            var person = await _context.Persons.FindAsync(id);
 
-//            return genderType;
-//        }
+            return person;
+        }
 
-//        public async Task<GenderType> Add(GenderType genderType)
-//        {
-//            genderType.DateCreated = DateTime.Now;
-//            genderType.IsDeleted = false;
+        public async Task<Person> Add(Person person)
+        {
+            person.PersonId = Guid.NewGuid().ToString();
+            person.DateCreated = DateTime.Now;
+            person.IsDeleted = false;
 
-//            _context.GenderTypes.Add(genderType);
+            _context.Persons.Add(person);
 
-//            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
-//            return genderType;
-//        }
+            return person;
+        }
 
-//        public async Task<GenderType?> Update(GenderType genderType)
-//        {
-//            var genderTypeToBeUpdated = await GetOne(genderType.GenderTypeId);
+        public async Task<Person?> Update(Person person)
+        {
+            var personToBeUpdated = await GetOne(person.PersonId);
 
-//            if (genderTypeToBeUpdated == null) return null;
+            if (personToBeUpdated == null) return null;
 
-//            genderTypeToBeUpdated.Name = genderType.Name;
+            personToBeUpdated.FirstName = person.FirstName;
+            personToBeUpdated.LastName = person.LastName;
+            personToBeUpdated.DateOfBirth = person.DateOfBirth;
+            personToBeUpdated.Email = person.Email;
+            personToBeUpdated.Phone = person.Phone;
+            personToBeUpdated.GenderTypeId = person.GenderTypeId;
 
-//            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
-//            return genderTypeToBeUpdated;
-//        }
+            return personToBeUpdated;
+        }
 
-//        public async Task<GenderType?> Delete(int id)
-//        {
-//            var genderTypeToBeDelete = await GetOne(id);
+        public async Task<Person?> Delete(string id)
+        {
+            var personToBeDelete = await GetOne(id);
 
-//            if (genderTypeToBeDelete == null) return null;
+            if (personToBeDelete == null) return null;
 
-//            genderTypeToBeDelete.IsDeleted = true;
+            personToBeDelete.IsDeleted = true;
 
-//            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
-//            return genderTypeToBeDelete;
-//        }
-//    }
-//}
+            return personToBeDelete;
+        }
+    }
+}

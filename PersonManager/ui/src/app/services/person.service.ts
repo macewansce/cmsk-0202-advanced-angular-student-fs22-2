@@ -10,7 +10,7 @@ import { Person } from "../models/person.model";
   providedIn: "root",
 })
 export class PersonService {
-  private url = "http://localhost:3000/persons"; // URL to the JSON server
+  private url = "https://localhost:7007/api/Persons"; // URL to the JSON server
 
   constructor(private http: HttpClient) {}
 
@@ -26,17 +26,17 @@ export class PersonService {
 
   // Add a new person
   addPerson(person: Person): Observable<Person> {
-    person.id = uuidv4(); // Generate GUID
+    person.personId = "";
     return this.http.post<Person>(this.url, person);
   }
 
   // Update an existing person
   updatePerson(person: Person): Observable<Person> {
-    return this.http.put<Person>(`${this.url}/${person.id}`, person);
+    return this.http.put<Person>(`${this.url}/${person.personId}`, person);
   }
 
   // Delete a person by id
-  deletePerson(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.url}/${id}`);
+  deletePerson(personId: string): Observable<void> {
+    return this.http.delete<void>(`${this.url}/${personId}`);
   }
 }

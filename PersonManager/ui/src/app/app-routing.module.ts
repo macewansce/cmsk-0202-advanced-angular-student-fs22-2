@@ -7,7 +7,7 @@ import { GenderTypeComponent } from './gender-type/gender-type.component';
 
 const routes: Routes = [
   { path: 'persons', component: PersonListComponent },
-  { path: 'person/:id', component: PersonComponent },
+  { path: 'person/:personId', component: PersonComponent },
   { path: "person", component: PersonComponent },
   { path: 'gender-types', component: GenderTypeListComponent },
   { path: 'gender-type/:id', component: GenderTypeComponent },

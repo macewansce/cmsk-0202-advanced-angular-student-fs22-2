@@ -4,8 +4,9 @@
   <table class="table">
     <thead>
       <tr>
-        <th>Name</th>
-        <th>Age</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Date Of Birth</th>
         <th>Gender</th>
         <th>Email</th>
         <th>Phone</th>
@@ -14,14 +15,14 @@
     </thead>
     <tbody>
       <tr *ngFor="let person of persons" >
-        <td >{{ person.name }}</td>
-        <td >{{ person.age }}</td>
+        <td >{{ person.firstName }}</td>
+        <td >{{ person.lastName }}</td>
+        <td >{{ person.dateOfBirth | date }}</td>
         <td >{{ getGenderTypeName(person.genderTypeId) }}</td>
         <td >{{ person.email }}</td>
-        <td >{{ person.phone }}</td>
+        <td >{{ person.phone | phone }}</td>
         <td appHighlight="yellow">
-          <!-- Button to view person details -->
-          <button (click)="viewPerson(person.id)" class="btn btn-primary" >
+          <button (click)="viewPerson(person.personId)" class="btn btn-primary" >
             View
           </button>
         </td>

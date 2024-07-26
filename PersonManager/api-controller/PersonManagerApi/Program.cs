@@ -9,6 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddTransient<IGenderTypesService, GenderTypesService>();
+builder.Services.AddTransient<IPersonsService, PersonsService>();
+
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {

@@ -1,12 +1,12 @@
 // Person model interface
 export interface Person {
-    id: string; // Unique identifier for each person
-    name: string; // Name of the person
-    age: number; // Age of the person
-    email: string; // Email address of the person
-    phone: string; // Phone number of the person
+    personId: string; 
+    firstName: string; 
+    lastName: string; 
     dateOfBirth: Date;
+    email: string; 
+    phone: number;
     genderTypeId: number
-    dateCreated: Date,
     isDeleted: boolean,
+    dateCreated: Date, 
   }
