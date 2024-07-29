@@ -1,44 +1,166 @@
 <!-- Form to view and edit person details -->
 <div class="container">
-  <form (ngSubmit)="savePerson()">
+  <form #personForm="ngForm" (ngSubmit)="savePerson()">
     <div class="form-group">
       <label for="firstName">First Name</label>
       <input
-        [(ngModel)]="person.firstName"
+        type="text"
+        id="firstName"
         name="firstName"
         class="form-control"
-        id="firstName"
         required
+        minlength="2"
+        maxlength="30"
+        pattern="^[A-Za-z'-]+$"
+        [(ngModel)]="person.firstName"
+        #firstName="ngModel"
       />
+      <div
+        *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)"
+        class="alert alert-danger"
+      >
+        <div *ngIf="firstName.hasError('required')">
+          First Name is required.
+        </div>
+        <div *ngIf="firstName.hasError('minlength')">
+          First Name must be at least 2 characters long.
+        </div>
+        <div *ngIf="firstName.hasError('pattern')">
+          First Name can only contain letters, hyphens, and apostrophes.
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="lastName">Last Name</label>
+      <input
+        type="text"
+        id="lastName"
+        name="lastName"
+        class="form-control"
+        required
+        minlength="2"
+        maxlength="30"
+        pattern="^[A-Za-z'-]+$"
+        [(ngModel)]="person.lastName"
+        #lastName="ngModel"
+      />
+      <div
+        *ngIf="lastName.invalid && (lastName.dirty || lastName.touched)"
+        class="alert alert-danger"
+      >
+        <div *ngIf="lastName.hasError('required')">Last Name is required.</div>
+        <div *ngIf="lastName.hasError('minlength')">
+          Last Name must be at least 2 characters long.
+        </div>
+        <div *ngIf="lastName.hasError('pattern')">
+          Last Name can only contain letters, hyphens, and apostrophes.
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="dateOfBirth">Date of Birth</label>
+      <input
+        type="date"
+        id="dateOfBirth"
+        name="dateOfBirth"
+        class="form-control"
+        required
+        date
+        [max]="today"
+        [ngModel]="person.dateOfBirth | date : 'yyyy-MM-dd'"
+        (ngModelChange)="person.dateOfBirth = $event"
+        #dateOfBirth="ngModel"
+      />
+      <div
+        *ngIf="
+          dateOfBirth.invalid && (dateOfBirth.dirty || dateOfBirth.touched)
+        "
+        class="alert alert-danger"
+      >
+        <div *ngIf="dateOfBirth.hasError('required')">
+          Date of Birth is required.
+        </div>
+        <div *ngIf="dateOfBirth.hasError('date')">
+          Date of Birth is required.
+        </div>
+      </div>
     </div>
     <div class="form-group">
       <label for="gender">Gender</label>
-      <select class="form-control" id="gender" [(ngModel)]="person.genderTypeId"  name="gender" required>
-        <option *ngFor="let genderType of genderTypes" [value]="genderType.genderTypeId">{{ genderType.name }}</option>
+      <select
+        class="form-control"
+        id="gender"
+        [(ngModel)]="person.genderTypeId"
+        name="gender"
+        #gender="ngModel"
+        pattern="^(?!0$)[0-9]+$"
+        required
+      >
+        <option [value]="0">--Select Gender--</option>
+        <option
+          *ngFor="let genderType of genderTypes"
+          [value]="genderType.genderTypeId"
+        >
+          {{ genderType.name }}
+        </option>
       </select>
+      <div
+        *ngIf="gender.invalid && (gender.dirty || gender.touched)"
+        class="alert alert-danger"
+      >
+        <div *ngIf="gender.hasError('required')">Gender is required.</div>
+        <div *ngIf="gender.hasError('pattern')">Gender is required.</div>
+      </div>
     </div>
     <div class="form-group">
       <label for="email">Email</label>
       <input
-        [(ngModel)]="person.email"
-        name="email"
         type="email"
-        class="form-control"
         id="email"
+        name="email"
+        class="form-control"
         required
+        email
+        [(ngModel)]="person.email"
+        #email="ngModel"
       />
+      <div
+        *ngIf="email.invalid && (email.dirty || email.touched)"
+        class="alert alert-danger"
+      >
+        <div *ngIf="email.hasError('required')">Email is required.</div>
+        <div *ngIf="email.hasError('email')">Email is not valid.</div>
+      </div>
     </div>
     <div class="form-group">
       <label for="phone">Phone</label>
       <input
-        [(ngModel)]="person.phone"
+        type="text"
+        id="phone"
         name="phone"
         class="form-control"
-        id="phone"
         required
+        pattern="^\d{10}$"
+        [(ngModel)]="person.phone"
+        #phone="ngModel"
       />
+      <div
+        *ngIf="phone.invalid && (phone.dirty || phone.touched)"
+        class="alert alert-danger"
+      >
+        <div *ngIf="phone.hasError('required')">Phone number is required.</div>
+        <div *ngIf="phone.hasError('pattern')">
+          Phone number must be exactly 10 digits.
+        </div>
+      </div>
     </div>
-    <button type="submit" class="btn btn-success">Save</button>
+    <button
+      type="submit"
+      class="btn btn-success"
+      [disabled]="personForm.invalid"
+    >
+      Save
+    </button>
     <button type="button" (click)="deletePerson()" class="btn btn-danger">
       Delete
     </button>

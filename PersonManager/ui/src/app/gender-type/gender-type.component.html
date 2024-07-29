@@ -1,11 +1,40 @@
 <div class="container">
-    <form (ngSubmit)="saveGenderType()">
-      <div class="form-group">
-        <label for="name">Name</label>
-        <input [(ngModel)]="genderType.name" name="name" class="form-control" id="name" required pattern="">
+  <form #genderTypeForm="ngForm" (ngSubmit)="saveGenderType()">
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input
+        type="text"
+        id="name"
+        name="name"
+        class="form-control"
+        required
+        minlength="5"
+        maxlength="15"
+        [(ngModel)]="genderType.name"
+        #name="ngModel"
+      />
+      <div
+        *ngIf="name.invalid && (name.dirty || name.touched)"
+        class="alert alert-danger"
+      >
+        <div *ngIf="name.hasError('required')">Name is required.</div>
+        <div *ngIf="name.hasError('minlength')">
+          Name must be at least 5 characters long.
+        </div>
       </div>
-      <button type="submit" class="btn btn-success">Save</button>
-      <button type="button" (click)="deleteGenderType()" class="btn btn-danger">Delete</button>
-      <button type="button" (click)="goBack()" class="btn btn-secondary">Back</button>
-    </form>
-  </div>
+    </div>
+    <button
+      type="submit"
+      class="btn btn-success"
+      [disabled]="genderTypeForm.invalid"
+    >
+      Save
+    </button>
+    <button type="button" (click)="deleteGenderType()" class="btn btn-danger">
+      Delete
+    </button>
+    <button type="button" (click)="goBack()" class="btn btn-secondary">
+      Back
+    </button>
+  </form>
+</div>

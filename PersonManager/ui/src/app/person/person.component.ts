@@ -71,4 +71,8 @@ export class PersonComponent implements OnInit {
   goBack() {
     this.router.navigate(['/persons']);
   }
+
+  get today(): string {
+    return new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+  }
 }
